@@ -14,4 +14,4 @@ Response of GET /caches and GET /caches/{name} also list number of cached entiti
 4. Import *cache-management-api-export.dat* in API Manager.  //password is changeme
 5. Test the endpoints, you can use postman collection *Cache-Management.postman_collection.json*
 
-**Warning :** Internal caches contain data such as HTTP session information and irresponsible cache manipulation may lead to unpexted failures. So be careful!!
+**Warning :** Internal caches contain data such as HTTP session information and irresponsible cache manipulation may lead to unexpected failures. So be careful!!

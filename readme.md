@@ -2,11 +2,9 @@
 
 With help of artifacts present in this repository, we can manage (Get/Create/Update/Delete) the API Gateway default and custom caches content. Here is the list of operations supported by API :
 
+![API Methods]( https://github.com/Axway-API-Management-Plus/cache-management/blob/master/src/lib/images/APIMethods.png )
 
-
-<aside class="notice">
 Response of GET /caches and GET /caches/{name} also list number of cached entities in caches
-</aside>
 
 **Usage:** 
 

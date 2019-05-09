@@ -1,0 +1,2010 @@
+<entityStoreData xmlns="http://www.vordel.com/2005/06/24/entityStore">
+<metaInfo flags="138">
+	<exportRoots>
+		<key type='ESConfiguration'>
+			<id field='name' value='Entity Store Configuration'/>
+		</key>
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+				</key>
+			</key>
+		</key>
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+				</key>
+			</key>
+		</key>
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+				</key>
+			</key>
+		</key>
+	</exportRoots>
+	<typeVersions>
+		<type name="ChangeMessageFilter" version="0"/>
+		<type name="CircuitContainer" version="1"/>
+		<type name="ConversionFilter" version="0"/>
+		<type name="ESConfiguration" version="27"/>
+		<type name="Entity" version="0"/>
+		<type name="ExtractRESTAttributesFilter" version="2"/>
+		<type name="Filter" version="5"/>
+		<type name="FilterCircuit" version="4"/>
+		<type name="JavaScriptFilter" version="3"/>
+		<type name="QuoteOftheDayFilter" version="0"/>
+		<type name="Reflector" version="0"/>
+		<type name="RemoveAttributeFilter" version="0"/>
+		<type name="RootChild" version="0"/>
+		<type name="SelectorFilter" version="1"/>
+		<type name="SetAttributeFilter" version="0"/>
+		<type name="SetHTTPStatusCode" version="0"/>
+		<type name="TrueFilter" version="0"/>
+	</typeVersions>
+	<realizedTypes><![CDATA[
+<entityStoreData>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" abstract="true" extends="Entity" name="RootChild"/>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="ESConfiguration">
+        <constant name="_version" type="integer" value="27"/>
+        <!--
+            Give this singleton a key.
+        -->
+        <field isKey="true" name="name" type="string"/>
+        <!-- 
+            We use this field to verify that the passphrase for the 
+            encryped data is synchronized between the server and client, and
+            between multiple invocations of the client
+        -->
+        <field name="passphraseTest" type="encrypted"/>
+        <field name="version" type="string"/>
+        <!-- The product key should never change for the lifetime of the product -->
+        <field name="productKey" type="string"/>
+        <field cardinality="?" name="gitrev" type="string"/>
+    </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="CircuitContainer">
+    <constant name="_version" type="integer" value="1"/>
+    <componentType cardinality="*" name="FilterCircuit"/>
+    <componentType cardinality="*" name="CircuitContainer"/>
+    <componentType cardinality="*" name="MVProperty"/>
+    <field isKey="true" name="name" type="string"/>
+  </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="FilterCircuit">
+        <constant name="_version" type="integer" value="4"/>
+		<componentType cardinality="*" name="Filter"/>
+		<componentType cardinality="1" name="BoundCircuit"/>
+		<componentType cardinality="*" name="Property"/>
+		<field cardinality="1" name="start" type="@Filter"/>
+		<field cardinality="?" name="fault" type="@Filter"/>
+		<field isKey="true" name="name" type="string"/>
+		<field cardinality="1" default="3" name="logMask" type="integer"/>
+
+		<field cardinality="?" name="description" type="string"/>		
+		<field cardinality="1" name="category" type="@PolicyCategory">
+            <defaultRef>
+                <key type="PolicyCategoryGroup">
+                  <id field="name" value="Policy Categories"/>
+                  <key type="PolicyCategory">
+                      <id field="name" value="miscellaneous"/>
+                  </key>
+                </key>
+            </defaultRef>
+        </field>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" abstract="true" extends="Entity" name="Filter">
+        <constant name="_version" type="integer" value="5"/>
+        <field cardinality="?" name="successNode" type="@Filter"/>
+        <field cardinality="?" name="failureNode" type="@Filter"/>
+        <field isKey="true" name="name" type="string"/>
+        <field cardinality="1" default="2" name="logMask" type="integer"/>
+        <field cardinality="1" default="Filter aborted due to exception" name="logFatal" type="string"/>
+        <field cardinality="1" default="Filter failed" name="logFailure" type="string"/>
+        <field cardinality="1" default="Filter passed" name="logSuccess" type="string"/>
+        <field cardinality="1" name="category" type="@Category">
+            <defaultRef>
+                <key type="CategoryGroup">
+                  <id field="name" value="Filter Categories"/>
+                  <key type="Category">
+                      <id field="name" value="miscellaneous"/>
+                  </key>
+                </key>
+            </defaultRef>
+        </field>
+      <field cardinality="1" default="0" name="abortProcessingOnLogError" type="boolean"/>
+      <field cardinality="1" default="SERVICE" name="logMaskType" type="string"/>
+      <field cardinality="*" name="classloader" type="^ClassLoader"/>
+    </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="SetAttributeFilter">
+        <constant name="_version" type="integer" value="0"/>
+  
+    <!-- Name of the Filter class that encapsulates this configuration entity -->
+    <constant name="class" type="string" value="com.vordel.circuit.attribute.SetAttributeFilter"/>
+    
+    <!-- List of the configuration parameters, their types, and their default values -->
+    <field cardinality="1" default="" name="messageAttribute" type="string"/>	
+    <field cardinality="1" default="" name="attributeValue" type="string"/>	
+  </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="QuoteOftheDayFilter">
+        <constant name="_version" type="integer" value="0"/>
+		<constant name="class" type="string" value="com.vordel.circuit.demo.QuoteOftheDayFilter"/>
+		<field cardinality="1" default="" name="quotes" type="string"/>	
+         </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="RemoveAttributeFilter">
+    <constant name="_version" type="integer" value="0"/>
+  
+    <!-- Name of the Filter class that encapsulates this configuration entity -->
+    <constant name="class" type="string" value="com.vordel.circuit.attribute.RemoveAttributeFilter"/>
+    
+    <!-- List of the configuration parameters, their types, and their default values -->
+    <field cardinality="1" default="" name="messageAttribute" type="string"/>	
+  </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="ExtractRESTAttributesFilter">
+    <constant name="_version" type="integer" value="2"/>
+    <constant name="class" type="string" value="com.vordel.circuit.attribute.ExtractRESTAttributesFilter"/>
+    <field cardinality="1" default="1" name="useHeaders" type="boolean"/>
+    <field cardinality="1" default="1" name="useQueryString" type="boolean"/>
+    <field cardinality="1" default="params.query" name="queryAttributePrefix" type="string"/>
+    <field cardinality="1" default="0" name="decode" type="boolean"/>
+    <field cardinality="1" name="category" type="@Category">
+      <defaultRef>
+        <key type="CategoryGroup">
+          <id field="name" value="Filter Categories"/>
+          <key type="Category">
+            <id field="name" value="attribute"/>
+          </key>
+        </key>
+      </defaultRef>
+    </field>
+  </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="TrueFilter">
+        <constant name="_version" type="integer" value="0"/>
+		<constant name="class" type="string" value="com.vordel.circuit.basic.True"/>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="SelectorFilter">
+        <constant name="_version" type="integer" value="1"/>
+            <constant name="class" type="string" value="com.vordel.circuit.basic.SelectorFilter"/>
+            <field cardinality="1" default="${1 + 1 == 2}" name="expression" type="string"/>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" abstract="true" extends="Filter" name="ConversionFilter">
+        <constant name="_version" type="integer" value="0"/>
+		<field cardinality="?" name="outputContentType" type="string"/> 
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="ConversionFilter" name="ChangeMessageFilter">
+        <constant name="_version" type="integer" value="0"/>
+		<constant name="class" type="string" value="com.vordel.circuit.conversion.ChangeMessageFilter"/>
+		<field cardinality="1" default="" name="body" type="string"/>	
+         </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="JavaScriptFilter">
+        <constant name="_version" type="integer" value="3"/>
+	<constant name="class" type="string" value="com.vordel.circuit.script.ScriptFilter"/>
+	<field cardinality="1" default="function invoke(msg)         {            return true;         }" name="script" type="string"/>
+	<field cardinality="1" default="nashorn" name="engineName" type="string"/>
+        <field cardinality="*" name="requiredProperties" type="string"/>
+        <field cardinality="*" name="generatedProperties" type="string"/>
+        <field cardinality="*" name="consumedProperties" type="string"/>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="SetHTTPStatusCode">
+        <constant name="_version" type="integer" value="0"/>
+		<constant name="class" type="string" value="com.vordel.circuit.net.SetHTTPStatusFilter"/>
+        <field cardinality="1" default="200" name="httpResponseStatus" type="integer"/>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="SetHTTPStatusCode" name="Reflector">
+        <constant name="_version" type="integer" value="0"/>
+		<constant name="class" type="string" value="com.vordel.circuit.net.ReflectFilter"/>
+	</entityType>
+</entityStoreData>
+	]]></realizedTypes>
+</metaInfo>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ESConfiguration">
+	<fval name="name"><value>Entity Store Configuration</value></fval>
+	<fval name="passphraseTest"><value>aHR0cDsvL3d3dy52b3JkZWwuY29t</value></fval>
+	<fval name="productKey"><value>VordelGateway</value></fval>
+	<fval name="version"><value>7.6.2</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="FilterCircuit">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+		</key>
+	</key>
+	<fval name="category"><value contentType="reference">
+		<key type='PolicyCategoryGroup'>
+			<id field='name' value='Policy Categories'/>
+			<key type='PolicyCategory'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="description"><value></value></fval>
+	<fval name="logMask"><value>3</value></fval>
+	<fval name="name"><value>Cache-Entity</value></fval>
+	<fval name="start"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>400</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.response.status</value></fval>
+	<fval name="name"><value>Set Attribute var.response.status 400</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${! var.stringBody.isEmpty() &amp;&amp; ! &quot;null&quot;.equals(var.stringBody) }</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='RemoveAttributeFilter'>
+						<id field='name' value='Remove Attribute content.body'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>var.stringBody not empty ?</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='ChangeMessageFilter'>
+						<id field='name' value='Set Response Message '/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="Reflector">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="httpResponseStatus"><value>${var.response.status}</value></fval>
+	<fval name="logFailure"><value>Failed to echo back the message</value></fval>
+	<fval name="logFatal"><value>Error occurred while echoing the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Successfully echoed back the message</value></fval>
+	<fval name="name"><value>Reflect Message var.response.status</value></fval>
+	<fval name="successNode"><value contentType="reference">-1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - delete cache entity</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.Message;&#xD;&#xA;import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg) {            &#xD;&#xA;try {&#xD;&#xA;&#x9;String value = null;&#xD;&#xA;&#x9;def cacheName = msg.get(&quot;var.cacheName&quot;);&#xD;&#xA;&#x9;def keyName = msg.get(&quot;var.cacheKey&quot;);&#xD;&#xA;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;if (cache == null) {&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 400);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;} &#xD;&#xA;&#x9;else {&#xD;&#xA;&#x9;&#x9;Element elmt = cache.get(keyName);&#xD;&#xA;&#x9;&#x9;if (elmt == null) {&#xD;&#xA;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 404);&#xD;&#xA;&#x9;&#x9;&#x9;elmt.toString();&#xD;&#xA;&#x9;&#x9;} &#xD;&#xA;&#x9;&#x9;else {&#xD;&#xA;&#x9;&#x9;&#x9;Trace.debug(&quot;ehcache object is : &quot; + elmt.getClass().getName())&#xD;&#xA;&#x9;&#x9;&#x9;value = elmt.getObjectValue().toString();&#xD;&#xA;&#x9;&#x9;&#x9;if (value == null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 404);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;else {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;cache.removeElement(elmt);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, null);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 204);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}&#xD;&#xA;} catch (Throwable e) {&#xD;&#xA;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;Trace.debug(&quot;Throwable Message :&quot; + v);&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.getCause();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable Cause :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.toString();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable toString() :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;return true;&#xD;&#xA;}&#xD;&#xA;}</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='var.stringBody not empty ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - get cache entity</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.Message;&#xD;&#xA;import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg)        &#xD;&#xA;{            &#xD;&#xA;&#x9;try {&#xD;&#xA;&#x9;&#x9;String value = null;&#xD;&#xA;&#x9;&#x9;def cacheName = msg.get(&quot;var.cacheName&quot;);&#xD;&#xA;&#x9;&#x9;def keyName = msg.get(&quot;var.cacheKey&quot;);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;&#x9;if (cache == null) {&#xD;&#xA;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 400);&#xD;&#xA;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;} else {&#xD;&#xA;&#x9;&#x9;&#x9;Element elmt = cache.get(keyName);&#xD;&#xA;&#x9;&#x9;&#x9;if (elmt == null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 404);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;&#x9;} else {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;Trace.debug(&quot;ehcache object is : &quot; + elmt.getClass().getName());&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;value = elmt.getObjectValue().toString();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;if (value == null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 404);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;} else {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, value);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 200);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;} catch (Throwable e) {&#xD;&#xA;&#x9;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable Message :&quot; + v);&#xD;&#xA;&#x9;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;&#x9;v = e.getCause();&#xD;&#xA;&#x9;&#x9;&#x9;Trace.debug(&quot;Throwable Cause :&quot; + v);&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;&#x9;v = e.toString();&#xD;&#xA;&#x9;&#x9;&#x9;Trace.debug(&quot;Throwable toString() :&quot; + v);&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;}    &#xD;&#xA;}&#xD;&#xA;</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='var.stringBody not empty ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="QuoteOftheDayFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Quote of the day service failed</value></fval>
+	<fval name="logFatal"><value>Error in quote of the day filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in quote of the day service</value></fval>
+	<fval name="name"><value>readme</value></fval>
+	<fval name="quotes"><value>Synopsys : Utility for cache.&#xD;&#xA;End point for Cache API &#xD;&#xA;Verb : DELETE,PUT,GET&#xD;&#xA;Api Name : caches/cacheName/Entity&#xD;&#xA;&#xD;&#xA;Actions : &#xD;&#xA;- verify attributes &#xD;&#xA;- groovy script to get/update/delete cache entity.&#xD;&#xA;&#xD;&#xA;Uses attributes :  &#xD;&#xA;- http.request.path&#xD;&#xA;&#xD;&#xA;Produces attributes : &#xD;&#xA;- var.response.status&#xD;&#xA;- var.bodyString</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ChangeMessageFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="body"><value>${var.stringBody}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed in setting the message</value></fval>
+	<fval name="logFatal"><value>Error in setting the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in setting the message</value></fval>
+	<fval name="name"><value>Set Response Message </value></fval>
+	<fval name="outputContentType"><value>application/json</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>403</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.response.status</value></fval>
+	<fval name="name"><value>Set Attribute var.response.status 403</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${http.request.verb == &quot;PUT&quot;}</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is http.request.verb == DELETE'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is http.request.verb == PUT</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set var.cacheValue'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${http.request.verb == &quot;DELETE&quot;}</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.response.status 403'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is http.request.verb == DELETE</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - delete cache entity'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ExtractRESTAttributesFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='attribute'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="decode"><value>0</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Extract REST Request Attributes</value></fval>
+	<fval name="queryAttributePrefix"><value>params.query</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is params.path.name &amp; params.path.key  set ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="useHeaders"><value>0</value></fval>
+	<fval name="useQueryString"><value>1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="RemoveAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to remove the attribute</value></fval>
+	<fval name="logFatal"><value>Error while removing the attribute. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Removed the attribute</value></fval>
+	<fval name="messageAttribute"><value>content.body</value></fval>
+	<fval name="name"><value>Remove Attribute content.body</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="TrueFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value></value></fval>
+	<fval name="logFatal"><value>True filter error. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>True filter passed</value></fval>
+	<fval name="name"><value>Start</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='ExtractRESTAttributesFilter'>
+						<id field='name' value='Extract REST Request Attributes'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${http.request.verb == &quot;GET&quot;}</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is http.request.verb == PUT'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is http.request.verb == GET</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - get cache entity'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - update cache entity</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.Message;&#xD;&#xA;import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg) {            &#xD;&#xA;try {&#xD;&#xA;&#x9;boolean isUpdte = false;&#xD;&#xA;&#x9;Element elmt = null;&#xD;&#xA;&#x9;def cacheName = msg.get(&quot;var.cacheName&quot;);&#xD;&#xA;&#x9;def keyName = msg.get(&quot;var.cacheKey&quot;);&#xD;&#xA;&#x9;def value = msg.get(&quot;var.cacheValue&quot;);&#xD;&#xA;&#x9;// value is request body to update the cache&#xD;&#xA;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;if (cache == null) {&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 400);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;} &#xD;&#xA;&#x9;else {&#xD;&#xA;&#x9;&#x9;elmt = cache.get(keyName);&#xD;&#xA;&#x9;&#x9;if (elmt != null) {&#xD;&#xA;&#x9;&#x9;&#x9;cache.removeElement(elmt);&#xD;&#xA;&#x9;&#x9;&#x9;isUpdte = true;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;elmt = new Element(keyName, value);&#xD;&#xA;&#x9;&#x9;if (elmt == null) {&#xD;&#xA;&#x9;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, null);&#xD;&#xA;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;else {&#xD;&#xA;&#x9;&#x9;&#x9;cache.put(elmt);&#xD;&#xA;&#x9;&#x9;&#x9;keyName = keyName.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;keyName = keyName.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;value = value.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;value = value.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;String stringBody = &quot;{ \&quot;&quot; + keyName + &quot;\&quot;: \&quot;&quot; + value + &quot;\&quot;}&quot;;&#xD;&#xA;&#x9;&#x9;&#x9;if (isUpdte)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 200);&#xD;&#xA;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 201);&#xD;&#xA;&#x9;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#x9;&#xD;&#xA;&#x9;&#x9;&#x9;return true;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}&#xD;&#xA;} catch (Throwable e) {&#xD;&#xA;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;Trace.debug(&quot; Throwable Message: &quot; + v);&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.getCause();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot; Throwable Cause: &quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.toString();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot; Throwable toString(): &quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;return true;&#xD;&#xA;}&#xD;&#xA;}</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='var.stringBody not empty ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>${content.body}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.cacheValue</value></fval>
+	<fval name="name"><value>Set var.cacheValue</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - update cache entity'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${ params.path.containsKey(&quot;name&quot;)  &amp;&amp; params.path.containsKey(&quot;key&quot;) }</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.response.status 400'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is params.path.name &amp; params.path.key  set ?</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.cacheName'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>${params.path.name}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.cacheName</value></fval>
+	<fval name="name"><value>Set Attribute var.cacheName</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.cacheKey'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Entity'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>${params.path.key}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.cacheKey</value></fval>
+	<fval name="name"><value>Set Attribute var.cacheKey</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Entity'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is http.request.verb == GET'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="CircuitContainer">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+	</key>
+	<fval name="name"><value>Cache Management</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="CircuitContainer">
+	<fval name="name"><value>#Axway</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="FilterCircuit">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+		</key>
+	</key>
+	<fval name="category"><value contentType="reference">
+		<key type='PolicyCategoryGroup'>
+			<id field='name' value='Policy Categories'/>
+			<key type='PolicyCategory'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="description"><value></value></fval>
+	<fval name="logMask"><value>3</value></fval>
+	<fval name="name"><value>Cache-Clear</value></fval>
+	<fval name="start"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="QuoteOftheDayFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Quote of the day service failed</value></fval>
+	<fval name="logFatal"><value>Error in quote of the day filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in quote of the day service</value></fval>
+	<fval name="name"><value>readme</value></fval>
+	<fval name="quotes"><value>Synopsys : Utility for Clear cache.&#xD;&#xA;End point for API &#xD;&#xA;Verb : DELETE&#xD;&#xA;Api Name : caches&#xD;&#xA;&#xD;&#xA;Actions : &#xD;&#xA;- verify attributes &#xD;&#xA;- groovy script to remove cache.&#xD;&#xA;&#xD;&#xA;Uses attributes :  &#xD;&#xA;- http.request.path&#xD;&#xA;&#xD;&#xA;Produces attributes : &#xD;&#xA;- var.response.status&#xD;&#xA;- var.stringBody&#xD;&#xA;</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ChangeMessageFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="body"><value>${ (var.stringBody.isEmpty())?&quot;&quot;:var.stringBody }</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed in setting the message</value></fval>
+	<fval name="logFatal"><value>Error in setting the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in setting the message</value></fval>
+	<fval name="name"><value>Set Error Message</value></fval>
+	<fval name="outputContentType"><value>application/json</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='ChangeMessageFilter'>
+						<id field='name' value='Set Error Message'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - clearAllCache</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.Message;&#xD;&#xA;import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg)        &#xD;&#xA;{            &#xD;&#xA;&#x9;try {&#xD;&#xA;&#x9;&#x9;String cacheName = &quot;HTTP Sessions&quot;;&#xD;&#xA;&#x9;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;&#x9;def cachemanager = cache.getCacheManager();&#xD;&#xA;&#x9;&#x9;cachemanager.clearAll();&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 204);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;} catch (Exception e) {&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Exception :&quot; + e.getMessage());&#xD;&#xA;&#x9;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;&#x9;return false;&#xD;&#xA;&#x9;}      &#xD;&#xA;}&#xD;&#xA;</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='RemoveAttributeFilter'>
+						<id field='name' value='Remove Attribute content.body'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ExtractRESTAttributesFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='attribute'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="decode"><value>0</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Extract REST Request Attributes</value></fval>
+	<fval name="queryAttributePrefix"><value>params.query</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is params.path.name set ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="useHeaders"><value>0</value></fval>
+	<fval name="useQueryString"><value>1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${ params.path.containsKey(&quot;name&quot;) }</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - clearAllCache'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is params.path.name set ?</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.cacheName'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="Reflector">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="httpResponseStatus"><value>${var.response.status}</value></fval>
+	<fval name="logFailure"><value>Failed to echo back the message</value></fval>
+	<fval name="logFatal"><value>Error occurred while echoing the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Successfully echoed back the message</value></fval>
+	<fval name="name"><value>Reflect Message var.response.status</value></fval>
+	<fval name="successNode"><value contentType="reference">-1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="RemoveAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to remove the attribute</value></fval>
+	<fval name="logFatal"><value>Error while removing the attribute. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Removed the attribute</value></fval>
+	<fval name="messageAttribute"><value>content.body</value></fval>
+	<fval name="name"><value>Remove Attribute content.body</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="TrueFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value></value></fval>
+	<fval name="logFatal"><value>True filter error. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>True filter passed</value></fval>
+	<fval name="name"><value>Start</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='ExtractRESTAttributesFilter'>
+						<id field='name' value='Extract REST Request Attributes'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='ChangeMessageFilter'>
+						<id field='name' value='Set Error Message'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - clearCacheByName</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.Message;&#xD;&#xA;import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg)        &#xD;&#xA;{     &#xD;&#xA;&#x9;def cacheName = msg.get(&quot;var.cacheName&quot;);  &#xD;&#xA;&#x9;try {&#xD;&#xA;&#x9;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;&#x9;cache.removeAll();&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 204);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;} catch (Exception e) {&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Exception :&quot; + e.getMessage());&#xD;&#xA;&#x9;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;&#x9;return false;&#xD;&#xA;&#x9;}      &#xD;&#xA;}&#xD;&#xA;</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='RemoveAttributeFilter'>
+						<id field='name' value='Remove Attribute content.body'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-Clear'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>${params.path.name}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.cacheName</value></fval>
+	<fval name="name"><value>Set Attribute var.cacheName</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-Clear'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - clearCacheByName'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="FilterCircuit">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+		</key>
+	</key>
+	<fval name="category"><value contentType="reference">
+		<key type='PolicyCategoryGroup'>
+			<id field='name' value='Policy Categories'/>
+			<key type='PolicyCategory'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="description"><value></value></fval>
+	<fval name="logMask"><value>3</value></fval>
+	<fval name="name"><value>Cache-List</value></fval>
+	<fval name="start"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="QuoteOftheDayFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Quote of the day service failed</value></fval>
+	<fval name="logFatal"><value>Error in quote of the day filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in quote of the day service</value></fval>
+	<fval name="name"><value>readme</value></fval>
+	<fval name="quotes"><value>Synopsys : Utility for cache.&#xD;&#xA;End point for Cache API &#xD;&#xA;Verb : GET&#xD;&#xA;Api Name : caches&#xD;&#xA;&#xD;&#xA;Actions : &#xD;&#xA;- verify attributes &#xD;&#xA;- call method in cache groovy script.&#xD;&#xA;&#xD;&#xA;Uses attributes :  &#xD;&#xA;- http.request.path&#xD;&#xA;&#xD;&#xA;Produces attributes : &#xD;&#xA;- var.response.status&#xD;&#xA;- var.bodyString&#xD;&#xA;</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='TrueFilter'>
+						<id field='name' value='Start'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="TrueFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value></value></fval>
+	<fval name="logFatal"><value>True filter error. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>True filter passed</value></fval>
+	<fval name="name"><value>Start</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='ExtractRESTAttributesFilter'>
+						<id field='name' value='Extract REST Request Attributes'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SelectorFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="expression"><value>${ params.path.containsKey(&quot;name&quot;) }</value></fval>
+	<fval name="failureNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - List all cache'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>0</value></fval>
+	<fval name="logMaskType"><value>FILTER</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Is params.path.name set ?</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='SetAttributeFilter'>
+						<id field='name' value='Set Attribute var.cacheName'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ChangeMessageFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="body"><value>${ (var.stringBody.isEmpty())?&quot;&quot;:var.stringBody}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed in setting the message</value></fval>
+	<fval name="logFatal"><value>Error in setting the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Success in setting the message</value></fval>
+	<fval name="name"><value>Set Response Message </value></fval>
+	<fval name="outputContentType"><value>application/json</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='Reflector'>
+						<id field='name' value='Reflect Message var.response.status'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - List all cache</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg) {                &#xD;&#xA;try {&#xD;&#xA;&#x9;int i;&#xD;&#xA;&#x9;List c;&#xD;&#xA;&#x9;List l;&#xD;&#xA;&#x9;String v = &quot;&quot;;&#xD;&#xA;&#x9;String jsonContent = &quot;[ &quot;;&#xD;&#xA;&#x9;String cacheName = &quot;HTTP Sessions&quot;;&#xD;&#xA;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;def cachemanager = cache.getCacheManager();&#xD;&#xA;&#x9;c = cachemanager.getCacheNames();&#xD;&#xA;&#x9;Collections.sort(c);&#xD;&#xA;&#x9;Iterator &lt; String &gt; iterC = c.iterator();&#xD;&#xA;&#x9;while (iterC.hasNext()) {&#xD;&#xA;&#x9;&#x9;String iterCname = iterC.next();&#xD;&#xA;&#x9;&#x9;cache = CacheContainer.getInstance().getCache(iterCname);&#xD;&#xA;&#x9;&#x9;if (cache != null) {&#xD;&#xA;&#x9;&#x9;&#x9;jsonContent = jsonContent + &quot;{ \&quot;name\&quot; : \&quot;&quot; + iterCname + &quot;\&quot; ,&quot;;&#xD;&#xA;&#x9;&#x9;&#x9;i = cache.getSize();&#xD;&#xA;&#x9;&#x9;&#x9;l = cache.getKeys();&#xD;&#xA;&#x9;&#x9;&#x9;jsonContent = jsonContent + String.format(&quot;\&quot;nbCachedEntities\&quot; : %d , \&quot;cachedEntities\&quot; : [&quot;, i);&#xD;&#xA;&#x9;&#x9;&#x9;try {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;Collections.sort(l);&#xD;&#xA;&#x9;&#x9;&#x9;} catch (Throwable e) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;Trace.debug(&quot;ehcache : Not sortable list&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;&#x9;Iterator &lt; String &gt; iter = l.iterator();&#xD;&#xA;&#x9;&#x9;&#x9;while (iter.hasNext()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;String k = iter.next();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;Element e = cache.get(k);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;if (e == null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;v = &quot;&quot;;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;} else {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;v = e.getObjectValue().toString();&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;jsonContent = jsonContent + &quot;{ \&quot;&quot; + k + &quot;\&quot;: \&quot;&quot; + v + &quot;\&quot;}&quot;;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;if (iter.hasNext())&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;jsonContent = jsonContent + &quot;, &quot;;&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;jsonContent = jsonContent + &quot;]}&quot;;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;if (iterC.hasNext())&#xD;&#xA;&#x9;&#x9;&#x9;jsonContent = jsonContent + &quot;, &quot;;&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;jsonContent = jsonContent + &quot;] &quot;;&#xD;&#xA;&#x9;msg.put(&quot;var.stringBody&quot;, jsonContent);&#xD;&#xA;&#x9;msg.put(&quot;var.response.status&quot;, 200);&#xD;&#xA;&#x9;return true;&#xD;&#xA;} catch (Throwable e) {&#xD;&#xA;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;Trace.debug(&quot;Throwable Message :&quot; + v);&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.getCause();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable Cause :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.toString();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable toString() :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;return true;&#xD;&#xA;}&#xD;&#xA;} </value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='ChangeMessageFilter'>
+						<id field='name' value='Set Response Message '/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="Reflector">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="httpResponseStatus"><value>${var.response.status}</value></fval>
+	<fval name="logFailure"><value>Failed to echo back the message</value></fval>
+	<fval name="logFatal"><value>Error occurred while echoing the message. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Successfully echoed back the message</value></fval>
+	<fval name="name"><value>Reflect Message var.response.status</value></fval>
+	<fval name="successNode"><value contentType="reference">-1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ExtractRESTAttributesFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='attribute'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="decode"><value>0</value></fval>
+	<fval name="logFailure"><value>Filter failed</value></fval>
+	<fval name="logFatal"><value>Filter aborted due to exception</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Filter passed</value></fval>
+	<fval name="name"><value>Extract REST Request Attributes</value></fval>
+	<fval name="queryAttributePrefix"><value>params.query</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='SelectorFilter'>
+						<id field='name' value='Is params.path.name set ?'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="useHeaders"><value>0</value></fval>
+	<fval name="useQueryString"><value>1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="SetAttributeFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="attributeValue"><value>${params.path.name}</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="logFailure"><value>Failed to set the attribute value</value></fval>
+	<fval name="logFatal"><value>Error while setting the attribute value. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Set the attribute value</value></fval>
+	<fval name="messageAttribute"><value>var.cacheName</value></fval>
+	<fval name="name"><value>Set Attribute var.cacheName</value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='JavaScriptFilter'>
+						<id field='name' value='Scripting - List cache by name'/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='#Axway'/>
+		<key type='CircuitContainer'>
+			<id field='name' value='Cache Management'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='Cache-List'/>
+			</key>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>groovy</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Scripting - List cache by name</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>import com.vordel.circuit.cache.CacheContainer;&#xD;&#xA;import net.sf.ehcache.Cache;&#xD;&#xA;import net.sf.ehcache.Element;&#xD;&#xA;import com.vordel.trace.Trace;&#xD;&#xA;&#xD;&#xA;import net.minidev.json.JSONArray&#xD;&#xA;import net.minidev.json.JSONObject&#xD;&#xA;&#xD;&#xA;def invoke(msg) {                &#xD;&#xA;try {&#xD;&#xA;&#x9;int i;&#xD;&#xA;&#x9;List l;&#xD;&#xA;&#x9;JSONObject jsonObj = new JSONObject();&#xD;&#xA;&#x9;JSONArray jsonArr = new JSONArray();&#xD;&#xA;&#x9;def cacheName = msg.get(&quot;var.cacheName&quot;);&#xD;&#xA;&#x9;Trace.debug(&quot;script cache name : &quot; + cacheName);&#xD;&#xA;&#xD;&#xA;&#x9;Cache cache = CacheContainer.getInstance().getCache(cacheName);&#xD;&#xA;&#x9;if (cache == null) {&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 404);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;} else {&#xD;&#xA;&#x9;&#x9;i = cache.getSize();&#xD;&#xA;&#x9;&#x9;l = cache.getKeys();&#xD;&#xA;&#x9;&#x9;try {&#xD;&#xA;&#x9;&#x9;&#x9;Collections.sort(l);&#xD;&#xA;&#x9;&#x9;} catch (Throwable e) {&#xD;&#xA;&#x9;&#x9;&#x9;Trace.debug(&quot;ehcache : Not sortable list&quot;);&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;Iterator &lt; String &gt; iter = l.iterator();&#xD;&#xA;&#x9;&#x9;while (iter.hasNext()) {&#xD;&#xA;&#x9;&#x9;&#x9;String k = iter.next();&#xD;&#xA;&#x9;&#x9;&#x9;Trace.debug(&quot;ehcache object is : &quot; + (cache.get(k)).getClass().getName())&#xD;&#xA;&#x9;&#x9;&#x9;String v = cache.get(k).getObjectValue().toString();&#xD;&#xA;&#x9;&#x9;&#x9;JSONObject ce = new JSONObject();&#xD;&#xA;&#x9;&#x9;&#x9;ce.put(k, v);&#xD;&#xA;&#x9;&#x9;&#x9;jsonArr.add(ce);&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;jsonObj.put(&quot;nbCachedEntities&quot;, l.size());&#xD;&#xA;&#x9;&#x9;jsonObj.put(&quot;cachedEntities&quot;, (Object)jsonArr);&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.stringBody&quot;, jsonObj.toString());&#xD;&#xA;&#x9;&#x9;msg.put(&quot;var.response.status&quot;, 200);&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;}&#xD;&#xA;} catch (Throwable e) {&#xD;&#xA;&#x9;String v = e.getMessage();&#xD;&#xA;&#x9;Trace.debug(&quot;Throwable Message :&quot; + v);&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.getCause();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable Cause :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;if (v == null) {&#xD;&#xA;&#x9;&#x9;v = e.toString();&#xD;&#xA;&#x9;&#x9;Trace.debug(&quot;Throwable toString() :&quot; + v);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;v = v.replace(&quot;\\&quot;, &quot;\\\\&quot;);&#xD;&#xA;&#x9;v = v.replace(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;);&#xD;&#xA;&#x9;String stringBody = &quot;{ \&quot;error\&quot; : \&quot;&quot; + v + &quot;\&quot; }&quot;;&#xD;&#xA;&#x9;msg.put(&quot;var.stringBody&quot;, stringBody);&#xD;&#xA;&#x9;msg.put(&quot;var.response.status&quot;, 500);&#xD;&#xA;&#x9;return true;&#xD;&#xA;}&#xD;&#xA;} </value></fval>
+	<fval name="successNode"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='#Axway'/>
+			<key type='CircuitContainer'>
+				<id field='name' value='Cache Management'/>
+				<key type='FilterCircuit'>
+					<id field='name' value='Cache-List'/>
+					<key type='ChangeMessageFilter'>
+						<id field='name' value='Set Response Message '/>
+					</key>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+</entityStoreData>

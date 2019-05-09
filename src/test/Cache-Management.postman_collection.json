@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "89238775-8583-9f95-3ad4-55e22e1d9432",
+		"name": "Cache-Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches"
+					]
+				},
+				"description": "List all caches"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches/HTTP Sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches",
+						"{{cacheName}}"
+					]
+				},
+				"description": "List cache by name"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches/HTTP Sessions/54be90b2-7f80-4813-82d9-af6404e1c199",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}/{{key}}",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches",
+						"{{cacheName}}",
+						"{{key}}"
+					]
+				},
+				"description": "List cache entity by key"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}/{{key}}",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"test\":\"test value\"\n}"
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}/{{key}}",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches",
+						"{{cacheName}}",
+						"{{key}}"
+					]
+				},
+				"description": "To add or update a key in cache"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}/{{key}}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}/{{key}}",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches",
+						"{{cacheName}}",
+						"{{key}}"
+					]
+				},
+				"description": "To delete a key from cache"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches/{{cacheName}}",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches",
+						"{{cacheName}}"
+					]
+				},
+				"description": "Clear an entire cache"
+			},
+			"response": []
+		},
+		{
+			"name": "https://{{apigw_host}}:{{apigw_port}}/api/caches",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{apigw_host}}:{{apigw_port}}/api/caches",
+					"protocol": "https",
+					"host": [
+						"{{apigw_host}}"
+					],
+					"port": "{{apigw_port}}",
+					"path": [
+						"api",
+						"caches"
+					]
+				},
+				"description": "Clear all caches"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4a19c900-fcdb-4a78-a1b6-d5b5c20915d8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "702c029c-cd18-493c-9026-d7236e808024",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "934b6f29-acdd-4fbf-8032-6c9e1bbfc744",
+			"key": "cacheName",
+			"value": "HTTP Sessions",
+			"type": "string"
+		},
+		{
+			"id": "3951b4ea-4fef-4d25-8feb-3c0678c4341e",
+			"key": "key",
+			"value": "test",
+			"type": "string"
+		}
+	]
+}
